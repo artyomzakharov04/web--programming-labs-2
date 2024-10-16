@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Автомобили</title>
+</head>
+<body>
+    <h1>Наши автомобили</h1>
+    <div>
+        {% for car in cars %}
+        <div>
+            <img src="{{ url_for('static', filename=car.image) }}" alt="{{ car.name }}" width="200">
+            <h3>{{ car.name }}</h3>
+            <p>Цена: ${{ car.price }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

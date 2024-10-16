@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Захаров Артём. Лабораторная работа 2</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. {% if lab_num %} Лабораторная работа 2{% endif %}
+    </header>
+
+</p>
+
+<a href="/menu">Меню</a>
+
+
+    <main>
+        5+2 = {{ 5 + 2 }} <br>
+        11*28 = {{ 11*28 }}<br>
+        8452/793 = {{ 8452/793 }}<br>
+        45**8 = {{ 45**8 }}<br>
+        <ul>
+            {% for f in fruits %}
+            <li>{{ f.name }}: {{ f.price }} &#x20bd</li>
+            {% endfor %} <br>
+            {% for b in books %}
+            <li>{{ b.name }}: {{ b.price }} &#x20bd</li>
+            {% endfor %}
+        </ul>
+        
+    </main>
+
+    <footer>
+        &copy;
+        {% if name %} 
+            {{ name }},
+        {% else %}
+            Анонимус,
+        {% endif %} 
+        {{ group }}, 
+        {{ course }}, 
+        2024
+    </footer>
+    
+</body>
+</html>
