@@ -1,0 +1,15 @@
+body {
+    background-color: #418a7d; / Светло-серый фон /
+    color: #333; / Темно-серый текст /
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  img {
+    max-width: 500px; / Максимальная ширина изображения /
+    max-height: 300px; / Максимальная высота изображения /
+    display: block; / Запрещает ненужные отступы /
+  }
