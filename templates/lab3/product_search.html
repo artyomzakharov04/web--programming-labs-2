@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block lab %}Поиск автомобилей{% endblock %}
+
+{% block main %}
+    <h1>Поиск автомобилей по цене</h1>
+    <form action="/lab3/product_search" method="post">
+        <label for="min_price">Минимальная цена:</label>
+        <input type="number" id="min_price" name="min_price" required><br><br>
+
+        <label for="max_price">Максимальная цена:</label>
+        <input type="number" id="max_price" name="max_price" required><br><br>
+
+        <input type="submit" value="Искать">
+    </form>
+
+    <h2>Доступные автомобили:</h2>
+    <ul>
+        {% for car in cars %}
+            <li>
+                {{ car.name }} - {{ car.price }} руб
+                {% if 'brand' in car %} (Бренд: {{ car.brand }}) {% endif %}
+                {% if 'color' in car %} (Цвет: {{ car.color }}) {% endif %}
+                {% if 'type' in car %} (Тип: {{ car.type }}) {% endif %}
+                {% if 'engine' in car %} (Двигатель: {{ car.engine }}) {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

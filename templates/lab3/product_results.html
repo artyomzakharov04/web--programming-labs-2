@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block lab %}Результаты поиска автомобилей{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    {% if cars %}
+        <ul>
+            {% for car in cars %}
+            <li>
+                {{ car.name }} - {{ car.price }} руб
+                {% if 'brand' in car %} (Бренд: {{ car.brand }}) {% endif %}
+                {% if 'color' in car %} (Цвет: {{ car.color }}) {% endif %}
+                {% if 'type' in car %} (Тип: {{ car.type }}) {% endif %}
+                {% if 'engine' in car %} (Двигатель: {{ car.engine }}) {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет автомобилей в указанном диапазоне цен.</p>
+{% endif %}
+<a href="/lab3/product_search">Вернуться к поиску</a>
+{% endblock %}
