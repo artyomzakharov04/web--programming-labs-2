@@ -35,38 +35,38 @@ def example():
 
 @lab2.route('/lab2/')
 def lab():
-     return render_template('lab2.html')
+     return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/cars')
 def cars():
     cars = [
         {
-            'image': 'car1.jpg',
+            'image': 'lab1/car1.jpg',
             'name': 'Toyota Camry',
             'price': 25000
         },
         {
-            'image': 'car2.jpg',
+            'image': 'lab1/car2.jpg',
             'name': 'Honda Civic',
             'price': 20000
         },
         {
-            'image': 'car3.jpg',
+            'image': 'lab1/car3.jpg',
             'name': 'Ford Mustang',
             'price': 35000
         },
         {
-            'image': 'car4.jpg',
+            'image': 'lab1/car4.jpg',
             'name': 'Chevrolet Silverado',
             'price': 30000
         },
         {
-            'image': 'car5.jpg',
+            'image': 'lab1/car5.jpg',
             'name': 'Nissan Altima',
             'price': 22000
         }
     ]
-    return render_template("cars.html", cars=cars)
+    return render_template("lab2/cars.html", cars=cars)
 
 if __name__ == "__main__":
     lab2.run()
