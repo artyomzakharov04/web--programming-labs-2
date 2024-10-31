@@ -59,12 +59,12 @@ def oak():
      return '''
 <!DOCTYPE html>
     <head>
-       <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') +'''">
+       <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') +'''">
     </head>
 <html>
     <body>
         <h1>Дуб<h1>
-        <img src="''' + url_for('static', filename='oak1.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/oak1.jpg') + '''">
     <body>
 </html>
 '''
@@ -77,7 +77,7 @@ def student():
 <html>
     <body>
         <h1>НГТУ - Главный корпус</h1>
-        <img src="''' + url_for('static', filename='student.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/student.jpg') + '''">
     </body>
 </html>
 '''
@@ -104,7 +104,7 @@ def python():
         <p>
         
         </p>
-        <img src="''' + url_for('static', filename='python.png') + '''">
+        <img src="''' + url_for('static', filename='lab1/python.png') + '''">
     </body>
 </html>
 '''
@@ -131,7 +131,7 @@ def monkey():
         <p>
 
         </p>
-        <img src="''' + url_for('static', filename='monkey.jpg') + '''">
+        <img src="''' + url_for('static', filename='lab1/monkey.jpg') + '''">
     </body>
 </html>
 '''
