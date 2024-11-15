@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+   {% block lab %}Лабораторная работа 5{% endblock %}
+
+   {% block main %}
+       <h1>Поздравляем, {{ login }}!</h1>
+       <p>Вы успешно зарегистрировались в базе знаний.</p>
+       <p><a href="{{ url_for('lab5.login') }}">Перейти к базе знаний</a></p>
+   {% endblock %}
