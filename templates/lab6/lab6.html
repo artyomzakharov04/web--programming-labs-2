@@ -1,0 +1,95 @@
+{% extends "base.html" %} 
+
+{% block lab %}Лабораторная работа 6{% endblock %} 
+
+{% block script %} 
+<script> 
+function getOfficeList() {
+    const url = '/lab6/json-rpc-api/';
+    const json = {
+        'jsonrpc': '2.0',
+        'method': 'info',
+        'id': Math.round(Math.random() * 1000)
+    };
+    fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json)
+    })
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        return response.json();
+    })
+    .then(function(data) {
+        const office_list = data.result;
+        const ul = document.getElementById('office-list');
+        ul.innerHTML = ''; // Очищаем список перед обновлением
+        for (let i = 0; i < office_list.length; i++) {
+            const office = office_list[i];
+            const li = document.createElement('li');
+            li.innerHTML = `${office.number}: ${office.tenant || 'свободен'} <button onclick="booking(${office.number})">зарезервировать</button>`;
+            ul.appendChild(li);
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка при получении списка офисов:", error);
+        alert("Произошла ошибка при загрузке списка офисов.");
+    });
+}
+
+function booking(officeNumber) {
+    const url = '/lab6/json-rpc-api/';
+    const json = {
+        'jsonrpc': '2.0',
+        'method': 'booking',
+        'params': officeNumber,
+        'id': Math.round(Math.random() * 1000)
+    };
+    fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json)
+    })
+    .then(function(response) {
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        return response.json();
+    })
+    .then(function(data) {
+        if (data.error) {
+            switch (data.error.code) {
+                case 1:
+                    alert('Вы не авторизованы');
+                    break;
+                case 2:
+                    alert('Офис уже арендуется');
+                    break;
+                case -32601:
+                    alert('Странная ошибка');
+                    break;
+                default:
+                    alert('Неизвестная ошибка');
+            }
+        } else {
+            getOfficeList(); // Обновляем список после успешного бронирования
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка при бронировании:", error);
+        alert("Произошла ошибка при бронировании.");
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    getOfficeList();
+});
+</script> 
+{% endblock %} 
+
+{% block main %} 
+    <h1>Список кабинетов</h1> 
+    <ul id="office-list"></ul> 
+{% endblock %}

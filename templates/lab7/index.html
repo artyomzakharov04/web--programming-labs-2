@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 7{% endblock %}
+
+{% block script %}
+    <style>
+        .modal {
+            display: none;
+            z-index: 100;
+            box-shadow: 3px 3px 5px black;
+            background: white;
+            width: 500px;
+            left: 50%;
+            top: 220px;
+            margin-left: -200px;
+            position: absolute;
+            padding: 20px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049; 
+        }
+    </style>
+    <script>
+        // Функция для заполнения списка фильмов
+        function fillFilmList() {
+            fetch('/lab7/rest-api/films/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка сети');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const filmList = document.getElementById('film-list');
+                    filmList.innerHTML = ''; // Очищаем список перед обновлением
+                    data.forEach(film => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${film.title_ru}</td>
+                            <td>${film.title || ''}</td>
+                            <td>${film.year}</td>
+                            <td>
+                                <button onclick="editFilm(${film.id})">Редактировать</button>
+                                <button onclick="deleteFilm(${film.id})">Удалить</button>
+                            </td>
+                        `;
+                        filmList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при загрузке списка фильмов.');
+                });
+        }
+
+        // Функция для открытия модального окна добавления фильма
+        function addFilm() {
+            // Очищаем поля формы перед открытием
+            document.getElementById('title_ru').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('year').value = '';
+            document.getElementById('description').value = '';
+            document.querySelector('.modal').style.display = 'block';
+        }
+
+        // Функция для отправки данных о фильме на сервер
+        function sendFilm() {
+            const film = {
+                title_ru: document.getElementById('title_ru').value,
+                title: document.getElementById('title').value,
+                year: parseInt(document.getElementById('year').value),
+                description: document.getElementById('description').value
+            };
+
+            // Проверка данных перед отправкой
+            if (!film.title_ru) {
+                alert('Русское название фильма обязательно!');
+                return;
+            }
+            if (!film.year || film.year < 1895 || film.year > new Date().getFullYear()) {
+                alert('Некорректный год выпуска!');
+                return;
+            }
+            if (!film.description) {
+                alert('Описание фильма обязательно!');
+                return;
+            }
+
+            // Отправка данных на сервер
+            fetch('/lab7/rest-api/films/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(film)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сервера');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.querySelector('.modal').style.display = 'none'; // Закрываем модальное окно
+                fillFilmList(); // Обновляем список фильмов
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при добавлении фильма.');
+            });
+        }
+
+        // Функция для закрытия модального окна без сохранения
+        function cancel() {
+            document.querySelector('.modal').style.display = 'none';
+        }
+
+        // Функция для удаления фильма
+        function deleteFilm(id) {
+            if (confirm('Вы уверены, что хотите удалить этот фильм?')) {
+                fetch(`/lab7/rest-api/films/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка сервера');
+                    }
+                    fillFilmList(); // Обновляем список фильмов
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при удалении фильма.');
+                });
+            }
+        }
+
+        // Загружаем список фильмов при загрузке страницы
+        document.addEventListener('DOMContentLoaded', fillFilmList);
+    </script>
+{% endblock %}
+
+{% block main %}
+    <h1>Список фильмов</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Название</th>
+                <th>Год</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody id="film-list"></tbody>
+    </table>
+
+    <div>
+        <button onclick="addFilm()">Добавить фильм</button>
+    </div>
+
+    <div class="modal">
+        <input type="hidden" id="id">
+        <label>
+            Название фильма на русском:
+            <input type="text" id="title_ru" required>
+        </label><br>
+
+        <label>
+            Название фильма на оригинальном языке<br>
+            <i>(Если фильм русский, то оставьте пустым):</i>
+            <input type="text" id="title">
+        </label><br>
+
+        <label>
+            Год выпуска:
+            <input type="number" id="year" required>
+        </label><br>
+
+        <label>
+            Описание:
+            <textarea id="description" required></textarea>
+            <div id="description-error" class="error-message"></div>
+        </label><br>
+
+        <button onclick="sendFilm()">ОК</button>
+        <button onclick="cancel()">Отмена</button>
+    </div>
+{% endblock %}

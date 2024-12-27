@@ -4,40 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Захаров Артём. {% block lab %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
     <style>
         body {
-            {% if request.cookies.get('color') %}
+            {% if request.cookies.get('color') and request.cookies.get('color') != 'None' %}
             color: {{ request.cookies.get('color') }};
             {% endif %}
             
-            {% if request.cookies.get('background_color') %}
+            {% if request.cookies.get('background_color') and request.cookies.get('background_color') != 'None' %}
             background-color: {{ request.cookies.get('background_color') }};
             {% endif %}
             
-            {% if request.cookies.get('font_size') %}
+            {% if request.cookies.get('font_size') and request.cookies.get('font_size') != 'None' %}
             font-size: {{ request.cookies.get('font_size') }};
             {% endif %}
             
-            {% if request.cookies.get('text_align') %}
+            {% if request.cookies.get('text_align') and request.cookies.get('text_align') != 'None' %}
             text-align: {{ request.cookies.get('text_align') }};
             {% endif %}
         }
     </style>
+    {% block script %}{% endblock %}
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        WEB-программирование, часть 2. {{ self.lab() | default('') }}
     </header>
     <main>
         {% block main %}{% endblock %}
-
     </main>
 
     <footer>
         <a href="/">Меню</a>
         &copy; Захаров Артём, ФБИ-23, 3 курс, 2024
     </footer>
-    
 </body>
 </html>
